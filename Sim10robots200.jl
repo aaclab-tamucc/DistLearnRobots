@@ -1,7 +1,7 @@
 push!(LOAD_PATH, ".")
 using  Distributed
 
-M  = 25; T = 1.0; H = 3; L = 30; MAX_ITER = 100
+M  = 10; T = 1.0; H = 3; L = 30; MAX_ITER = 100
 nP = M
 nW = nworkers()
 (nP+1 > nW) ? addprocs(nP-nW+1) : nothing 
@@ -24,8 +24,8 @@ include("connectivity.jl")
 
 ENV["GKSwstype"]="nul"
 
-x_min =  0.; x_max = 400.
-y_min =  0.; y_max = 400.
+x_min =  0.; x_max = 200.
+y_min =  0.; y_max = 200.
 color =  cgrad(:turbo, M, categorical = true, scale = :lin)
 
 
@@ -45,7 +45,7 @@ GaussianProcesses.optimize!(GPtruth, domean = true, kern = true, noise = true)
 println([-log.(GPtruth.kernel.iℓ2)/2; log(GPtruth.kernel.σ2)/2; GPtruth.logNoise.value])
 
 
-s_max = 20.; R = 80.; r = 6.
+s_max = 10.; R = 40.; r = 3.
 pBounds  = polyBound(s_max, x_min, x_max, y_min, y_max)
 
 
@@ -144,6 +144,6 @@ png(FigpResE, "ResE")
 png(plot(1:L, Eig2[1:L], linestyles = :dot, linewidth=3, xlims = (0,L+0.5), ylims = (0, 1.1*maximum(Eig2)), 
                 tickfontsize = 20, markershape = :circle, markersize = 5, label="", framestyle = :box), "Eig2")
 
-matwrite("Data25robo400.mat", Dict("RMSE" => RMSE, "ResE" => ResE, "Eig2" => Eig2))
+matwrite("Data10robo200.mat", Dict("RMSE" => RMSE, "ResE" => ResE, "Eig2" => Eig2))
 save_object("25robots.jld2", robo)
 
