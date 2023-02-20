@@ -70,7 +70,7 @@ temp     = reshape(vectemp, testSize[1], testSize[2])'
 gr(size=(700,600))
 Fig0 = heatmap(hor_gr, ver_gr,  temp, c = :turbo, aspect_ratio = 1, tickfontsize = 16, 
                                 clim =(2.5, 6.5), label = "", xlims = (x_min,x_max), ylims = (y_min,y_max))
-png(Fig0, "step 0")
+png(Fig0, "Figs-10robots-200/GroundTruth")
 
 
 
@@ -130,20 +130,20 @@ FigRMSE = errorline(1:L, RMSE[:,1:L], linestyles = :solid, linewidth=2, secondar
 secondarycolor=:blue,  legendfontsize = 16, tickfontsize = 20, framestyle = :box, label = "")
 # errorline!(1:L, RMSE, linestyles = :solid, linewidth=2, xlims = (0,L+0.5), errorstyle=:ribbon, label="")
 scatter!(1:L, [mean(RMSE[:,i]) for i in 1:L], label="Mean Errors")
-png(FigRMSE, "RMSE")
+png(FigRMSE, "Figs-10robots-200/RMSE")
 
 pResE    = zeros(M,MAX_ITER)
 [pResE[i,:] = sum(ResE[:,i,k] for k in 1:L)/L for i in 1:M]
-id       = minimum([nonzero(pResE[i,:],0.) for i in 1:M]) - 7
-FigpResE = errorline(1:id, pResE[:,1:id], secondarylinewidth=2, secondarycolor=:blue, errorstyle=:stick, framestyle = :box, yticks = 10 .^(-3.:1.:2.), label = "",
+id       = minimum([nonzero(pResE[i,:],0.) for i in 1:M])
+FigpResE = errorline(1:id, pResE[:,1:id], secondarylinewidth=2, secondarycolor=:blue, errorstyle=:stick, framestyle = :box, yticks = 10 .^(-4.:1.:2.), label = "",
             legendfontsize = 16, tickfontsize = 20, xlims = (0, id-0.5), ylims = (1e-3, 2e2),  yscale=:log10, linestyles = :solid, linewidth=2)
 scatter!(1:id, [mean(pResE[:,k]) for k in 1:id], label="Mean Errors")
-png(FigpResE, "ResE")
+png(FigpResE, "Figs-10robots-200/ResE")
 
                 
 png(plot(1:L, Eig2[1:L], linestyles = :dot, linewidth=3, xlims = (0,L+0.5), ylims = (0, 1.1*maximum(Eig2)), 
-                tickfontsize = 20, markershape = :circle, markersize = 5, label="", framestyle = :box), "Eig2")
+                tickfontsize = 20, markershape = :circle, markersize = 5, label="", framestyle = :box), "Figs-10robots-200/Eig2")
 
 matwrite("Data10robo200.mat", Dict("RMSE" => RMSE, "ResE" => ResE, "Eig2" => Eig2))
-save_object("25robots.jld2", robo)
+save_object("10robots.jld2", robo)
 
